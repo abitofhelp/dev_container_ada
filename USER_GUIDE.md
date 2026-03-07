@@ -346,6 +346,13 @@ docker-build:
 
 ### 7.3 Revised targets
 
+> **Important — Mount Point Selection**: The default `make run` mounts only the
+> current directory. If your project uses Alire path pins with relative paths
+> (e.g., `../deps26/AdaSAT-26.0.0`), you must mount high enough in the directory
+> tree for those references to resolve inside the container. See the
+> "Read Me First: Choosing the Right Mount Point" section in [README.md](README.md)
+> for the three scenarios and examples.
+
 ```makefile
 # Primary local workflow
 run:

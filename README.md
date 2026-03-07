@@ -50,6 +50,49 @@ parallels@container /workspace (main) [ctr:rootless]
 - GitHub Actions for build verification and container publishing
 - Makefile for common build and run targets
 
+## Read Me First: Choosing the Right Mount Point
+
+The `-v` (bind mount) flag determines which host directories are visible inside
+the container. The correct mount point depends on how your project resolves its
+dependencies.
+
+| Scenario | Mount point | Example |
+|----------|-------------|---------|
+| **Published crates only** | Project directory | `-v ~/projects/my_app:/workspace` |
+| **Pinned deps (absolute paths)** | The pinned path itself | `-v /deps26:/deps26` |
+| **Pinned deps (relative paths)** | Common ancestor of project and deps | `-v ~/ada/github.com/abitofhelp:/home/you/ada/github.com/abitofhelp` |
+
+**Why this matters**: Alire resolves pin paths in `alire.toml` relative to the
+project root. If your pins use relative paths (e.g., `../deps26/AdaSAT-26.0.0`),
+the mount must be high enough in the directory tree for those `../` references
+to resolve inside the container.
+
+For example, given this host layout:
+
+```text
+~/ada/github.com/abitofhelp/
+├── my_app/          ← project with pinned deps
+├── functional/      ← ../functional pin
+└── deps26/          ← ../deps26/* pins
+```
+
+Mount the common parent and set `-w` to the project:
+
+```bash
+nerdctl run -it --rm \
+  -e HOST_UID=$(id -u) \
+  -e HOST_GID=$(id -g) \
+  -e HOST_USER=$(whoami) \
+  -v "$HOME/ada/github.com/abitofhelp":/home/$(whoami)/ada/github.com/abitofhelp \
+  -w /home/$(whoami)/ada/github.com/abitofhelp/my_app \
+  dev-container-ada
+```
+
+If your project uses only published Alire crates (no pins), the simple
+`-v "$(pwd)":/workspace` shown below is all you need.
+
+---
+
 ## Quick Start
 
 ### Pull the pre-built image
