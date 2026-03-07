@@ -182,11 +182,11 @@ setup_home() {
     # Ensure expected directories exist.
     mkdir -p "${TARGET_HOME}/.local/bin"
 
-    # Chown the Alire toolchains so the target user can write to them.
-    # The symlink points to the fallback user's home; the target user needs
-    # write access for alr to function.
-    if [ -d "${FALLBACK_HOME}/.local/share/alire" ]; then
-        chown -R "${HOST_UID}:${HOST_GID}" "${FALLBACK_HOME}/.local/share/alire" 2>/dev/null || true
+    # Chown the fallback home so the target user can access symlinked
+    # Alire toolchains and their parent directories.  The container is
+    # ephemeral, so changing ownership of the build-time user's home is safe.
+    if [ "${TARGET_HOME}" != "${FALLBACK_HOME}" ]; then
+        chown -R "${HOST_UID}:${HOST_GID}" "${FALLBACK_HOME}" 2>/dev/null || true
     fi
 
     # Non-fatal: some files may be on read-only mounts.
