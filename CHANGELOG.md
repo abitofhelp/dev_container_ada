@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [2.0.0] - 2026-03-08
 
 ### Added
 
@@ -15,11 +15,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Two-job publish workflow (`publish-alire` + `publish-system`) in
   `docker-publish.yml`.
 - USER_GUIDE §0 "Choosing a Dockerfile" with rationale and guidance.
+- Alire configured with `gnat_external` in system image so `alr build` uses
+  the system compiler without downloading toolchains.
 
 ### Changed
 
-- Default `Dockerfile` base image from Ubuntu 24.04 to Ubuntu 22.04, matching
-  the platform Alire's GNAT toolchains are built on.
+- **BREAKING**: Default `Dockerfile` base image from Ubuntu 24.04 to Ubuntu
+  22.04, matching the platform Alire's GNAT toolchains are built on.
 - GitHub Actions pinned by SHA digest for supply-chain security.
 - Documentation updated throughout for dual-Dockerfile structure.
 
