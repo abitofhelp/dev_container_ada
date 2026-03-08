@@ -81,10 +81,14 @@ help:
 	@echo "  test-podman-system   Build and run hello_ada example with system image (podman rootless)"
 	@echo "  clean                Remove build artifacts (dist/, archives)"
 	@echo "  compress             Create a compressed source archive from HEAD"
-	@echo "  docker-build         Build with docker instead of nerdctl"
-	@echo "  docker-run           Run with docker instead of nerdctl"
-	@echo "  podman-build         Build with podman instead of nerdctl"
-	@echo "  podman-run           Run with podman (uses --userns=keep-id)"
+	@echo "  docker-build         Build the default image with docker"
+	@echo "  docker-build-system  Build the system image with docker"
+	@echo "  docker-run           Run the default image with docker"
+	@echo "  docker-run-system    Run the system image with docker"
+	@echo "  podman-build         Build the default image with podman"
+	@echo "  podman-build-system  Build the system image with podman"
+	@echo "  podman-run           Run the default image with podman (--userns=keep-id)"
+	@echo "  podman-run-system    Run the system image with podman (--userns=keep-id)"
 	@echo ""
 	@echo "Variables:"
 	@echo "  CONTAINER_CLI        Container CLI to use (default: nerdctl)"
@@ -282,9 +286,17 @@ test-podman-system:
 docker-build:
 	$(MAKE) build CONTAINER_CLI=docker
 
+.PHONY: docker-build-system
+docker-build-system:
+	$(MAKE) build-system CONTAINER_CLI=docker
+
 .PHONY: docker-run
 docker-run:
 	$(MAKE) run CONTAINER_CLI=docker
+
+.PHONY: docker-run-system
+docker-run-system:
+	$(MAKE) run-system CONTAINER_CLI=docker
 
 # ----------------------------------------------------------------------------
 # Podman convenience aliases
@@ -297,6 +309,10 @@ docker-run:
 podman-build:
 	$(MAKE) build CONTAINER_CLI=podman
 
+.PHONY: podman-build-system
+podman-build-system:
+	$(MAKE) build-system CONTAINER_CLI=podman
+
 .PHONY: podman-run
 podman-run:
 	podman run -it --rm \
@@ -304,6 +320,14 @@ podman-run:
 		-v "$(CURDIR)":/workspace \
 		-w /workspace \
 		$(IMAGE_NAME)
+
+.PHONY: podman-run-system
+podman-run-system:
+	podman run -it --rm \
+		--userns=keep-id \
+		-v "$(CURDIR)":/workspace \
+		-w /workspace \
+		$(SYSTEM_IMAGE_NAME)
 
 # ----------------------------------------------------------------------------
 # Image management
