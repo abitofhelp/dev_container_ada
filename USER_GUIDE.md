@@ -29,10 +29,10 @@ only need native compilation — may find this simpler.
 
 Rather than declare one approach wrong, this project ships both:
 
-| Dockerfile | Base | Compiler source | Image name |
-|------------|------|-----------------|------------|
-| `Dockerfile` (default) | Ubuntu 22.04 | Alire-managed GNAT + GPRBuild | `dev-container-ada` |
-| `Dockerfile.system` | Ubuntu 24.04 | Ubuntu `gnat-13` + `gprbuild` packages | `dev-container-ada-system` |
+| Dockerfile | Base | Compiler source | Architectures | Image name |
+|------------|------|-----------------|---------------|------------|
+| `Dockerfile` (default) | Ubuntu 22.04 | Alire-managed GNAT + GPRBuild | amd64 | `dev-container-ada` |
+| `Dockerfile.system` | Ubuntu 24.04 | Ubuntu `gnat-13` + `gprbuild` packages | amd64, arm64 | `dev-container-ada-system` |
 
 **Start with the default.** It gives you Alire's full toolchain management,
 including the ability to install cross compilers for embedded targets. Switch
@@ -41,12 +41,17 @@ compilation.
 
 ### 0.2 Supported architectures
 
-Both images are published as multi-architecture manifests for `linux/amd64`
-(x86_64) and `linux/arm64` (aarch64 / Apple Silicon). When you pull an image,
+| Image | `linux/amd64` | `linux/arm64` | Notes |
+|-------|:---:|:---:|-------|
+| `dev-container-ada` | Yes | No | The Alire 2.1.0 aarch64 binary requires glibc 2.38 (Ubuntu 22.04 ships 2.35), and Alire does not distribute pre-built `gnat_native` toolchains for aarch64-linux. |
+| `dev-container-ada-system` | Yes | Yes | All components (GNAT, GPRBuild, Alire) are available for both architectures on Ubuntu 24.04. |
+
+The system toolchain image is published as a multi-architecture manifest.
 Docker selects the native variant for your platform automatically.
 
-On Apple Silicon Macs, the `arm64` image runs natively — no Rosetta 2
-emulation overhead.
+On Apple Silicon Macs, the system toolchain image (`Dockerfile.system`) runs
+natively with no Rosetta 2 emulation overhead. The Alire-managed image runs
+on Apple Silicon via Rosetta 2.
 
 ### 0.3 What stays the same
 
@@ -729,22 +734,24 @@ Rebuild and test the affected image after updating.
 
 1. Check the latest release at
    `https://github.com/alire-project/alire/releases`.
-2. Download both architecture binaries and compute their checksums:
+2. Download the binaries and compute their checksums:
 
    ```bash
-   # amd64
+   # Dockerfile (amd64 only)
    curl -sL -o /tmp/alr-amd64.zip \
      https://github.com/alire-project/alire/releases/download/v<version>/alr-<version>-bin-x86_64-linux.zip
    sha256sum /tmp/alr-amd64.zip
 
-   # arm64
+   # Dockerfile.system (amd64 + arm64)
    curl -sL -o /tmp/alr-arm64.zip \
      https://github.com/alire-project/alire/releases/download/v<version>/alr-<version>-bin-aarch64-linux.zip
    sha256sum /tmp/alr-arm64.zip
    ```
 
-3. Update `ALIRE_VERSION`, `ALIRE_SHA256_AMD64`, and `ALIRE_SHA256_ARM64` in
-   both Dockerfiles.
+3. Update the relevant ARGs in each Dockerfile:
+   - `Dockerfile`: `ALIRE_VERSION`, `ALIRE_SHA256`, `ALIRE_ZIP`
+   - `Dockerfile.system`: `ALIRE_VERSION`, `ALIRE_SHA256_AMD64`,
+     `ALIRE_SHA256_ARM64`
 4. Rebuild and verify that `alr version` reports the expected release.
 
 ### 15.3 GNAT and GPRBuild

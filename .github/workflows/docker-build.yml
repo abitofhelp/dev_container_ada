@@ -25,6 +25,7 @@ jobs:
             dockerfile: "Dockerfile"
             image_name: "dev-container-ada"
             build_args: "--build-arg GNAT_VERSION=15.2.1 --build-arg GPRBUILD_VERSION=25.0.1"
+            platforms: "linux/amd64"
             compile_cmd: "alr exec -- gprbuild -P hello_ada.gpr -j0"
             gnat_cmd: "alr exec -- gnat --version | head -1"
             gprbuild_cmd: "alr exec -- gprbuild --version | head -1"
@@ -32,6 +33,7 @@ jobs:
             dockerfile: "Dockerfile.system"
             image_name: "dev-container-ada-system"
             build_args: ""
+            platforms: "linux/amd64,linux/arm64"
             compile_cmd: "gprbuild -P hello_ada.gpr -j0"
             gnat_cmd: "gnat --version | head -1"
             gprbuild_cmd: "gprbuild --version | head -1"
@@ -46,10 +48,10 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3.12.0
 
-      - name: Build multi-platform image (${{ matrix.name }})
+      - name: Build image (${{ matrix.name }}, ${{ matrix.platforms }})
         run: |
           docker buildx build \
-            --platform linux/amd64,linux/arm64 \
+            --platform ${{ matrix.platforms }} \
             -f ${{ matrix.dockerfile }} \
             ${{ matrix.build_args }} \
             -t ${{ matrix.image_name }}:ci .

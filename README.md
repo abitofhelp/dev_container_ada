@@ -8,8 +8,16 @@
 
 Professional Ada development container using **Alire**, **GNAT**, and **GPRBuild**.
 
-**Supported architectures**: `linux/amd64` (x86_64) and `linux/arm64` (Apple Silicon).
-Docker automatically pulls the correct image for your platform.
+## Supported Architectures
+
+| Image | `linux/amd64` | `linux/arm64` | Notes |
+|-------|:---:|:---:|-------|
+| `dev-container-ada` | Yes | No | Alire does not distribute `alr` or `gnat_native` binaries for aarch64 that are compatible with Ubuntu 22.04. |
+| `dev-container-ada-system` | Yes | Yes | All components (GNAT, GPRBuild, Alire) are available for both architectures on Ubuntu 24.04. |
+
+Apple Silicon users should use the **system toolchain image** (`Dockerfile.system`)
+for native arm64 performance. The Alire-managed image runs on Apple Silicon via
+Rosetta 2 emulation.
 
 ## Image Names
 
@@ -22,10 +30,10 @@ ghcr.io/abitofhelp/dev-container-ada-system   # Ubuntu system toolchain (alterna
 
 This repository ships two Dockerfiles representing two valid toolchain strategies:
 
-| Dockerfile | Base | Compiler source | Image name |
-|------------|------|-----------------|------------|
-| `Dockerfile` (default) | Ubuntu 22.04 | Alire-managed GNAT + GPRBuild | `dev-container-ada` |
-| `Dockerfile.system` | Ubuntu 24.04 | Ubuntu `gnat-13` + `gprbuild` packages | `dev-container-ada-system` |
+| Dockerfile | Base | Compiler source | Architectures | Image name |
+|------------|------|-----------------|---------------|------------|
+| `Dockerfile` (default) | Ubuntu 22.04 | Alire-managed GNAT + GPRBuild | amd64 | `dev-container-ada` |
+| `Dockerfile.system` | Ubuntu 24.04 | Ubuntu `gnat-13` + `gprbuild` packages | amd64, arm64 | `dev-container-ada-system` |
 
 **Which should I use?** Start with the default (`Dockerfile`). Alire's downloadable
 Linux GNAT toolchains are built on Ubuntu 22.04, making it the most conservative
@@ -55,7 +63,8 @@ parallels@container /workspace (main) [ctr:rootless]
 
 ## Features
 
-- Multi-architecture support: `linux/amd64` and `linux/arm64` (native Apple Silicon)
+- Multi-architecture support for the system toolchain image (`linux/amd64` +
+  `linux/arm64`); Alire-managed image is `linux/amd64` only
 - Two Dockerfile variants: Alire-managed toolchain (Ubuntu 22.04) and system
   toolchain (Ubuntu 24.04)
 - Alire package manager

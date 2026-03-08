@@ -9,24 +9,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Multi-architecture support: both images now build for `linux/amd64` and
-  `linux/arm64` (Apple Silicon). Docker pulls the native variant automatically.
-- QEMU setup in CI workflows for cross-platform builds.
+- Multi-architecture support (`linux/amd64` + `linux/arm64`) for the system
+  toolchain image (`Dockerfile.system`). Docker pulls the native arm64 variant
+  automatically on Apple Silicon.
+- QEMU setup in CI workflows for cross-platform builds of the system image.
 - Per-architecture Alire checksums (`ALIRE_SHA256_AMD64`, `ALIRE_SHA256_ARM64`)
-  in both Dockerfiles with dynamic binary selection via `uname -m`.
-- USER_GUIDE §0.2 "Supported architectures" section.
+  in `Dockerfile.system` with dynamic binary selection via `uname -m`.
+- Architecture support table in README and USER_GUIDE §0.2.
+- Makefile convenience aliases: `docker-build-system`, `docker-run-system`,
+  `podman-build-system`, `podman-run-system`.
+- USER_GUIDE §0.2 "Supported architectures" section documenting why the
+  Alire-managed image is amd64-only.
 
 ### Changed
 
-- `docker-build.yml` now uses `docker buildx build --platform linux/amd64,linux/arm64`
-  instead of plain `docker build`. The smoke test loads the amd64 image only
-  (GitHub Actions runners are amd64).
-- `docker-publish.yml` adds `platforms: linux/amd64,linux/arm64` to both
-  `docker/build-push-action` steps, producing multi-arch manifests on GHCR.
-- Replaced `ALIRE_SHA256` and `ALIRE_ZIP` build args with `ALIRE_SHA256_AMD64`
-  and `ALIRE_SHA256_ARM64`; the Alire install step selects the correct binary
-  at build time.
-- USER_GUIDE §15.2 updated to document checksums for both architectures.
+- `docker-build.yml` now uses `docker buildx build` with per-matrix platform
+  support: amd64-only for the Alire image, amd64+arm64 for the system image.
+- `docker-publish.yml` adds `platforms: linux/amd64,linux/arm64` to the
+  system image job, producing a multi-arch manifest on GHCR.
+- USER_GUIDE §15.2 updated to document per-Dockerfile Alire upgrade steps.
+
+### Not changed
+
+- The Alire-managed image (`Dockerfile`) remains `linux/amd64` only. Alire
+  2.1.0's aarch64 binary requires glibc 2.38 (Ubuntu 22.04 ships 2.35), and
+  Alire does not distribute pre-built `gnat_native` toolchains for
+  aarch64-linux.
 
 ## [2.0.1] - 2026-03-08
 
