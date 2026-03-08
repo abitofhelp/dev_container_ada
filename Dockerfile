@@ -117,6 +117,7 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 # Base packages (alphabetized)
 # ----------------------------------------------------------------------------
 RUN apt-get update && apt-get install -y --no-install-recommends \
+    bzip2 \
     ca-certificates \
     curl \
     fd-find \
@@ -126,10 +127,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     gosu \
     jq \
     less \
+    libgmp-dev \
     locales \
     lsof \
     make \
     nano \
+    openssh-client \
+    patch \
     pkg-config \
     procps \
     python3 \
@@ -138,6 +142,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python3-venv \
     ripgrep \
     rsync \
+    strace \
     sudo \
     tzdata \
     unzip \

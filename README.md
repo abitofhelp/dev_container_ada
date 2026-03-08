@@ -66,6 +66,33 @@ parallels@container /workspace (main) [ctr:rootless]
 - GitHub Actions for build verification and container publishing (both variants)
 - Makefile for common build and run targets (both variants)
 
+## Pre-installed Tools
+
+Both images ship the same set of developer tools. The Ada toolchain source
+differs (Alire-managed vs Ubuntu system packages), but all other tools are
+identical.
+
+| Category | Tools |
+|----------|-------|
+| **Ada toolchain** | alr, gnat, gprbuild, gnatmake, gnatbind, gnatlink, gnatls, gprof |
+| **Debugger / profiling** | gdb, strace, gcov, gcov-tool |
+| **Compiler infrastructure** | gcc, ld, as, ar, nm, objcopy, objdump, ranlib, readelf, size, strings, strip, addr2line |
+| **Build** | make, pkg-config |
+| **Version control** | git, patch, openssh-client (ssh, scp) |
+| **Text processing** | awk, sed, grep, diff, find, xargs, sort, uniq, wc, head, tail, tr, cut, tee |
+| **Network** | curl, wget, rsync |
+| **Archives** | tar, zip, unzip, xz, gzip, bzip2 |
+| **Editors** | vim, nano |
+| **Pagers / utilities** | less, more, file, which, lsof, ps, jq |
+| **Search** | ripgrep (rg), fd-find (fdfind), fzf |
+| **Python** | python3, pip3, python3-venv |
+| **Libraries** | libgmp-dev (required by GNATcoverage / libadalang) |
+| **Shell** | zsh (default), bash, zsh-autosuggestions, zsh-syntax-highlighting |
+| **Container** | gosu, sudo |
+
+Tools like GNATcoverage (`gnatcov`) and code formatters (`gnatformat`) are
+installed per-project via Alire crates, not baked into the base image.
+
 ## Read Me First: Choosing the Right Mount Point
 
 The `-v` (bind mount) flag determines which host directories are visible inside
