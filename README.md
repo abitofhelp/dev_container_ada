@@ -118,6 +118,36 @@ identical.
 Tools like GNATcoverage (`gnatcov`) and code formatters (`gnatformat`) are
 installed per-project via Alire crates, not baked into the base image.
 
+## Embedded Board Support
+
+Both images include C cross-compilers and hardware tools for two embedded
+development workflows:
+
+| Board | SoC | Core | Runtime | C Cross-compiler |
+|-------|-----|------|---------|------------------|
+| STM32F769I Discovery | STM32F769NI | Cortex-M7 | Bare metal | `arm-none-eabi-gcc` |
+| STM32MP135F Discovery | STM32MP135F | Cortex-A7 | Linux | `arm-linux-gnueabihf-gcc` |
+
+The bare-metal toolchain includes OpenOCD, stlink-tools, and gdb-multiarch for
+flashing and debugging. The Linux cross-compiler includes the full sysroot
+(`libc6-dev-armhf-cross`) for building Linux userspace applications.
+
+### Embedded Toolchain Readiness — Alire Image (`Dockerfile`)
+
+| Target | Ada Compiler | C Cross-compiler | Status |
+|--------|-------------|-------------------|--------|
+| Desktop (native) | `gnat` (Alire-managed) | n/a | Pre-installed |
+| STM32F769I — Cortex-M7 bare-metal | `gnat_arm_elf` via `alr toolchain --select` | `arm-none-eabi-gcc` | Ada: download required · C: pre-installed |
+| STM32MP135F — Cortex-A7 Linux | Not available via Alire | `arm-linux-gnueabihf-gcc` | Ada: not available · C: pre-installed |
+
+### Embedded Toolchain Readiness — System Image (`Dockerfile.system`)
+
+| Target | Ada Compiler | C Cross-compiler | Status |
+|--------|-------------|-------------------|--------|
+| Desktop (native) | `gnat-13` (apt) | n/a | Pre-installed |
+| STM32F769I — Cortex-M7 bare-metal | Not available via apt | `arm-none-eabi-gcc` | Ada: not available · C: pre-installed |
+| STM32MP135F — Cortex-A7 Linux | `gnat-13-arm-linux-gnueabihf` (apt) | `arm-linux-gnueabihf-gcc` | Ada: `sudo apt-get install` · C: pre-installed |
+
 ## Read Me First: Choosing the Right Mount Point
 
 The `-v` (bind mount) flag determines which host directories are visible inside

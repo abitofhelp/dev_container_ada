@@ -81,6 +81,44 @@ distributes these as downloadable toolchains, and they are built against
 Ubuntu 22.04. The system toolchain image does not support cross-target
 Ada compilation through Alire.
 
+#### Configuring your project for each target
+
+**Desktop — Alire image (`Dockerfile`)**
+
+The Alire-managed GNAT toolchain is pre-installed. Build with Alire directly:
+
+```bash
+alr build
+```
+
+**Desktop — System image (`Dockerfile.system`)**
+
+Tell Alire to use the system-installed GNAT compiler, then build:
+
+```bash
+alr toolchain --select gnat_external
+alr build
+```
+
+**STM32F769I — Cortex-M7 bare-metal (Alire image only)**
+
+Install the ARM bare-metal Ada cross-compiler via Alire, then build with
+GPRBuild using the appropriate target and runtime:
+
+```bash
+alr toolchain --select gnat_arm_elf
+gprbuild -P project.gpr --target=arm-eabi --RTS=light-cortex-m7f
+```
+
+**STM32MP135F — Cortex-A7 Linux (System image only)**
+
+Install the ARM Linux Ada cross-compiler from apt, then build with GPRBuild:
+
+```bash
+sudo apt-get install -y gnat-13-arm-linux-gnueabihf
+gprbuild -P project.gpr --target=arm-linux-gnueabihf
+```
+
 ---
 
 ## 1. Prerequisites
