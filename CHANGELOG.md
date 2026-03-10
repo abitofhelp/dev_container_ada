@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.2.1] - 2026-03-09
+
+### Added
+
+- "Embedded Board Support" section in README with board table and two
+  readiness tables (Alire image vs System image) showing Ada compiler and
+  C cross-compiler availability per target.
+- `alr`/`gprbuild` configuration examples in USER_GUIDE §0.4 for all four
+  target/image combinations (desktop Alire, desktop System, Cortex-M7
+  bare-metal, Cortex-A7 Linux).
+
+### Fixed
+
+- README badges placed on a single line for correct inline rendering.
+
 ## [2.2.0] - 2026-03-10
 
 ### Added
