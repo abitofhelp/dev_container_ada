@@ -63,11 +63,23 @@ Regardless of which Dockerfile you choose:
 
 ### 0.4 Cross-target and embedded development
 
-If you need Alire-managed cross compilers (e.g., `gnat_arm_elf` for
-bare-metal ARM, `gnat_riscv64_elf` for RISC-V), use the default
-`Dockerfile`. Alire distributes these as downloadable toolchains, and they
-are built against Ubuntu 22.04. The system toolchain image does not support
-cross-target compilation through Alire.
+Both images include C cross-compilers and hardware tools for two embedded
+development workflows:
+
+| Board | SoC | Core | Runtime | Cross-compiler |
+|-------|-----|------|---------|----------------|
+| STM32F769I Discovery | STM32F769NI | Cortex-M7 | Bare metal | `arm-none-eabi-gcc` |
+| STM32MP135F Discovery | STM32MP135F | Cortex-A7 | Linux | `arm-linux-gnueabihf-gcc` |
+
+The bare-metal toolchain includes OpenOCD, stlink-tools, and gdb-multiarch for
+flashing and debugging. The Linux cross-compiler includes the full sysroot
+(`libc6-dev-armhf-cross`) for building Linux userspace applications.
+
+For Ada-specific cross compilers (e.g., `gnat_arm_elf` for bare-metal ARM,
+`gnat_riscv64_elf` for RISC-V), use the default `Dockerfile`. Alire
+distributes these as downloadable toolchains, and they are built against
+Ubuntu 22.04. The system toolchain image does not support cross-target
+Ada compilation through Alire.
 
 ---
 

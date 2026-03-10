@@ -31,6 +31,7 @@
 #   • Ada development using Alire
 #   • GNAT compiler toolchain (Alire-managed)
 #   • GPRBuild build system (Alire-managed)
+#   • Embedded development (ARM Cortex-M bare-metal, ARM Cortex-A Linux)
 #   • Python 3 + venv
 #   • Zsh interactive shell
 #
@@ -162,6 +163,19 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     zsh \
     zsh-autosuggestions \
     zsh-syntax-highlighting \
+    # ------------------------------------------------------------------
+    # Embedded: ARM Cortex-M bare-metal cross-compiler and tools
+    # ------------------------------------------------------------------
+    gcc-arm-none-eabi \
+    gdb-multiarch \
+    libnewlib-arm-none-eabi \
+    openocd \
+    stlink-tools \
+    # ------------------------------------------------------------------
+    # Embedded: ARM Cortex-A Linux cross-compiler (STM32MP1)
+    # ------------------------------------------------------------------
+    gcc-arm-linux-gnueabihf \
+    libc6-dev-armhf-cross \
  && locale-gen en_US.UTF-8 \
  && update-locale LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 \
  && rm -rf /var/lib/apt/lists/*

@@ -77,6 +77,9 @@ parallels@container /workspace (main) [ctr:rootless]
 - Alire package manager
 - GNAT Ada compiler (Alire-managed or Ubuntu system package)
 - GPRBuild (Alire-managed or Ubuntu system package)
+- Embedded development:
+  - ARM Cortex-M bare-metal (STM32F769I and similar)
+  - ARM Cortex-A Linux cross-compilation (STM32MP135F and similar)
 - Python 3 + venv
 - Zsh interactive shell
 - runtime-adaptive user identity (no rebuild needed per developer)
@@ -95,7 +98,9 @@ identical.
 | Category | Tools |
 |----------|-------|
 | **Ada toolchain** | alr, gnat, gprbuild, gnatmake, gnatbind, gnatlink, gnatls, gprof |
-| **Debugger / profiling** | gdb, strace, gcov, gcov-tool |
+| **Debugger / profiling** | gdb, gdb-multiarch, strace, gcov, gcov-tool |
+| **Embedded (bare-metal)** | arm-none-eabi-gcc, libnewlib-arm-none-eabi, openocd, stlink-tools |
+| **Embedded (Linux cross)** | arm-linux-gnueabihf-gcc, libc6-dev-armhf-cross |
 | **Compiler infrastructure** | gcc, ld, as, ar, nm, objcopy, objdump, ranlib, readelf, size, strings, strip, addr2line |
 | **Build** | make, pkg-config |
 | **Version control** | git, patch, openssh-client (ssh, scp) |

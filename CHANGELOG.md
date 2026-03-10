@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.2.0] - 2026-03-10
+
+### Added
+
+- Embedded development toolchain for both images:
+  - ARM Cortex-M bare-metal cross-compiler (`gcc-arm-none-eabi`,
+    `libnewlib-arm-none-eabi`) for STM32F769I and similar boards.
+  - ARM Cortex-A Linux cross-compiler (`gcc-arm-linux-gnueabihf`,
+    `libc6-dev-armhf-cross`) for STM32MP135F and similar boards.
+  - Hardware tools: `openocd`, `stlink-tools`, `gdb-multiarch`.
+- Embedded board support table in README and USER_GUIDE §0.4.
+- Updated Dockerfile headers to document embedded development support.
+
 ## [2.1.1] - 2026-03-08
 
 ### Added
