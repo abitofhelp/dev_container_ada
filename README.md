@@ -2,7 +2,7 @@
 
 [![Build](https://github.com/abitofhelp/dev_container_ada/actions/workflows/docker-build.yml/badge.svg)](https://github.com/abitofhelp/dev_container_ada/actions/workflows/docker-build.yml) [![Publish](https://github.com/abitofhelp/dev_container_ada/actions/workflows/docker-publish.yml/badge.svg)](https://github.com/abitofhelp/dev_container_ada/actions/workflows/docker-publish.yml) [![License: BSD-3-Clause](https://img.shields.io/badge/License-BSD--3--Clause-blue.svg)](LICENSE) [![Default GNAT](https://img.shields.io/badge/GNAT-15.2.1-6f42c1)](#override-toolchain-versions) [![Container](https://img.shields.io/badge/container-ghcr.io%2Fabitofhelp%2Fdev--container--ada-0A66C2)](#image-name)
 
-Professional Ada development container using **Alire**, **GNAT**, and **GPRBuild**.
+Professional GNAT Ada development container for desktop and embedded (ARM Cortex-M/A) platforms with **Alire**, **GNAT**, and **GPRBuild**.
 
 ## Supported Architectures
 
